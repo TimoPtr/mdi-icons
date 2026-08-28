@@ -376,3 +376,7 @@ merged_results.sarif
 !.claude/skills
 !.claude/settings.json
 .cursor
+
+
+# iOS
+**/xcuserdata/
