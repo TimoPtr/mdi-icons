@@ -118,12 +118,19 @@ class MdiCatalogGeneratorTest {
     }
 
     @Test
-    fun `Given stale generated files when generating then they are deleted`() {
-        val dir = createTempDir().also { it.resolve("MdiIcons9.kt").writeText("stale") }
+    fun `Given stale generated files when generating then the whole package is replaced`() {
+        val dir = createTempDir().also {
+            it.resolve("MdiIcons9.kt").writeText("stale")
+            it.resolve("notes.txt").writeText("stale")
+            it.resolve("icons").mkdirs()
+            it.resolve("icons/Nested.kt").writeText("stale")
+        }
 
         generate(icon("alpha"), outputDir = dir)
 
         assertFalse(dir.resolve("MdiIcons9.kt").exists())
+        assertFalse(dir.resolve("notes.txt").exists())
+        assertFalse(dir.resolve("icons").exists())
     }
 
     @Test

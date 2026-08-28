@@ -89,9 +89,8 @@ internal object MdiCatalogGenerator {
     }
 
     private fun File.cleanGeneratedSources() {
+        deleteRecursively()
         mkdirs()
-        File(this, "icons").deleteRecursively()
-        listFiles { file -> file.extension == "kt" }?.forEach(File::delete)
     }
 
     /**
