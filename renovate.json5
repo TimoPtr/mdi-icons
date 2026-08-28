@@ -1,0 +1,22 @@
+{
+    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    extends: [
+        'config:best-practices',
+    ],
+    // The mdi-update workflow commits the regenerated catalog onto Renovate branches; without
+    // this, Renovate would treat its branches as user-modified and stop rebasing them.
+    gitIgnoredAuthors: [
+        'github-actions[bot]@users.noreply.github.com',
+    ],
+    customManagers: [
+        {
+            // Updates versions annotated with "# renovate: datasource=... depName=..." comments,
+            // such as the @mdi/svg pin consumed by the updateMdiIcons task.
+            customType: 'regex',
+            managerFilePatterns: ['/^gradle/libs\\.versions\\.toml$/'],
+            matchStrings: [
+                '# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\n[a-zA-Z0-9-]+ = "(?<currentValue>[^"]+)"',
+            ],
+        },
+    ],
+}
