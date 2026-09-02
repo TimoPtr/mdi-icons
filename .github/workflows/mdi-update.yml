@@ -1,0 +1,41 @@
+name: Regenerate MDI catalog
+
+# Renovate only bumps the mdi-svg pin in libs.versions.toml; the generated catalog must be
+# regenerated to match, which the hosted Renovate app cannot do itself. This workflow runs on
+# Renovate branches and commits the regenerated sources back, so the bump PR becomes green.
+on: # yamllint disable-line rule:truthy
+  push:
+    branches: ["renovate/**"]
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-build-env
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Regenerate the MDI catalog
+        run: ./gradlew :shared:updateMdiIcons
+
+      - name: Verify the catalog matches the pinned version
+        run: ./gradlew :shared:verifyMdiIcons
+
+      - name: Commit and push when the catalog changed
+        id: commit
+        run: |
+          git add shared/src/commonMain/kotlin/io/github/timoptr/mdiicons/generated
+          if git diff --cached --quiet; then
+            echo "Catalog already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Regenerate MDI catalog for the pinned @mdi/svg version"
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
