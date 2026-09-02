@@ -65,7 +65,7 @@ class MdiIconTest {
     }
 
     @Test
-    fun `Given a directional icon when building the image vector with autoMirror then it mirrors in RTL`() {
+    fun `Given a directional icon when building the image vector with autoMirror then autoMirror is enabled`() {
         assertTrue(Mdi.ArrowLeft.toImageVector(autoMirror = true).autoMirror)
     }
 }
