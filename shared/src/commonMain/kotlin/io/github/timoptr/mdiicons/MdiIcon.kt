@@ -19,16 +19,18 @@ data class MdiIcon(val name: String, val pathData: String) {
 
     /**
      * Builds the icon as an [ImageVector] filled in black, tintable like the Material icons.
-     * Composables use [rememberImageVector] instead, which caches the result for the lifetime of
-     * the composition.
+     * [autoMirror] flips the icon horizontally in right-to-left layouts, for directional icons
+     * such as arrows. Composables use [rememberImageVector] instead, which caches the result for
+     * the lifetime of the composition.
      */
-    internal fun toImageVector(): ImageVector = ImageVector
+    internal fun toImageVector(autoMirror: Boolean = false): ImageVector = ImageVector
         .Builder(
             name = name,
             defaultWidth = MDI_VIEWPORT_SIZE.dp,
             defaultHeight = MDI_VIEWPORT_SIZE.dp,
             viewportWidth = MDI_VIEWPORT_SIZE,
             viewportHeight = MDI_VIEWPORT_SIZE,
+            autoMirror = autoMirror,
         ).addPath(
             pathData = addPathNodes(pathData),
             fill = SolidColor(Color.Black),
