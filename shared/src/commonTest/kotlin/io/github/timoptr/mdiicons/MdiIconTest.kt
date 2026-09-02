@@ -1,13 +1,16 @@
 package io.github.timoptr.mdiicons
 
 import io.github.timoptr.mdiicons.generated.AccountAlert
+import io.github.timoptr.mdiicons.generated.ArrowLeft
 import io.github.timoptr.mdiicons.generated.Lightbulb
 import io.github.timoptr.mdiicons.generated.mdiAliases
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class MdiIconTest {
     @Test
@@ -54,5 +57,15 @@ class MdiIconTest {
 
         assertEquals(24f, vector.viewportWidth)
         assertEquals(24f, vector.viewportHeight)
+    }
+
+    @Test
+    fun `Given an icon when building the image vector then it does not auto-mirror by default`() {
+        assertFalse(Mdi.Lightbulb.toImageVector().autoMirror)
+    }
+
+    @Test
+    fun `Given a directional icon when building the image vector with autoMirror then autoMirror is enabled`() {
+        assertTrue(Mdi.ArrowLeft.toImageVector(autoMirror = true).autoMirror)
     }
 }

@@ -1,7 +1,31 @@
 # mdi-icons
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.timoptr/mdi-icons)](https://central.sonatype.com/artifact/io.github.timoptr/mdi-icons)
+
 A Compose Multiplatform library exposing the full [Material Design Icons](https://pictogrammers.com/library/mdi/)
 (MDI) catalog as Kotlin, targeting Android, iOS, desktop (JVM), JS and wasm.
+
+## Installation
+
+The library is published on [Maven Central](https://central.sonatype.com/artifact/io.github.timoptr/mdi-icons):
+
+```kotlin
+dependencies {
+    implementation("io.github.timoptr:mdi-icons:0.2.0")
+}
+```
+
+In a Compose Multiplatform project, add it to the `commonMain` source set instead:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation("io.github.timoptr:mdi-icons:0.2.0")
+        }
+    }
+}
+```
 
 ## Who this is for
 
@@ -36,6 +60,9 @@ This library replaces all of that with a small, owned pipeline over the canonica
 - Compile-time safe accessors for static usage: `Mdi.AccountAlert`, one `val` per icon.
 - Rendering as first-class Compose `ImageVector`s, identical to the frontend's path-based
   rendering: `Icon(icon.rememberImageVector(), ...)` in any composable.
+- RTL support for directional icons: `rememberImageVector(autoMirror = true)` flips the icon
+  horizontally in right-to-left layouts, like the Material `AutoMirrored` icons. MDI carries no
+  per-icon RTL metadata, so mirroring is opted into per call site.
 - Android-only `MdiIcon.toBitmap(...)` extensions (in `androidMain`) for surfaces that cannot
   render Compose: notifications, quick settings tiles, widgets, Android Auto.
 - An update pipeline: `./gradlew :shared:updateMdiIcons` regenerates the catalog from the version
