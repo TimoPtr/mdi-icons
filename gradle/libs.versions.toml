@@ -1,5 +1,5 @@
 [versions]
-agp = "9.3.2"
+agp = "9.4.0"
 android-compileSdk = "37"
 android-minSdk-library = "21"
 # material3, used by the sample apps only, requires 23.
