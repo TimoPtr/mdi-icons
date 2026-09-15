@@ -28,19 +28,22 @@ class ReadmeScreenshotTest {
     @Test
     @Config(qualifiers = "w900dp-h520dp-xhdpi")
     fun catalog() {
-        composeRule.setContent { App() }
-
-        composeRule.onRoot().captureRoboImage("catalog.png")
+        composeRule.apply {
+            setContent { App() }
+            waitForIdle()
+            onRoot().captureRoboImage("catalog.png")
+        }
     }
 
     @Test
     @Config(qualifiers = "w900dp-h330dp-xhdpi")
     fun search() {
-        composeRule.setContent { App() }
-
-        composeRule.onNode(hasSetTextAction()).performTextInput("home")
-        composeRule.onNodeWithContentDescription("home-assistant").performClick()
-
-        composeRule.onRoot().captureRoboImage("search.png")
+        composeRule.apply {
+            setContent { App() }
+            onNode(hasSetTextAction()).performTextInput("home")
+            onNodeWithContentDescription("home-assistant").performClick()
+            waitForIdle()
+            onRoot().captureRoboImage("search.png")
+        }
     }
 }
