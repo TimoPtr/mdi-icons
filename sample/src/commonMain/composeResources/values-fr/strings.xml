@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_subtitle">Material Design Icons pour Compose Multiplatform</string>
+    <string name="search_label">Rechercher parmi %1$d icônes</string>
+    <string name="switch_to_dark_theme">Passer au thème sombre</string>
+    <string name="switch_to_light_theme">Passer au thème clair</string>
+    <string name="view_on_github">Voir sur GitHub</string>
+    <plurals name="visible_icons">
+        <item quantity="one">%1$d icône, touchez-la pour voir son nom</item>
+        <item quantity="other">%1$d icônes, touchez-en une pour voir son nom</item>
+    </plurals>
+</resources>
