@@ -63,6 +63,27 @@ jobs:
           :shared:compileKotlinJs
           :shared:compileKotlinWasmJs
           :androidApp:assembleDebug
+          :webApp:composeCompatibilityBrowserDistribution
 
       - name: Run tests
         run: ./gradlew :shared:jvmTest :shared:testAndroid
+
+      # Re-records the README screenshots: any difference with the committed images means the
+      # sample UI changed without regenerating them.
+      - name: Record README screenshots
+        run: ./gradlew :sample:recordRoborazziAndroidHostTest
+
+      - name: Check README screenshots are up to date
+        run: |
+          if [ -n "$(git status --porcelain -- docs/images)" ]; then
+            git status --short -- docs/images
+            echo "::error title=Outdated README screenshots::The screenshots in docs/images do not match the sample app. Run ./gradlew :sample:recordRoborazziAndroidHostTest and commit the result, or download the readme-screenshots artifact of this run."
+            exit 1
+          fi
+
+      - name: Upload re-recorded screenshots
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: readme-screenshots
+          path: docs/images

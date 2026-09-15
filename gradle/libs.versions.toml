@@ -6,6 +6,8 @@ android-minSdk-library = "21"
 android-minSdk-sample = "23"
 android-targetSdk = "37"
 androidx-activity = "1.13.0"
+androidx-compose = "1.12.1"
+androidxTestEspresso = "3.7.0"
 composeMultiplatform = "1.12.0"
 junit = "4.13.2"
 kotlin = "2.4.20"
@@ -13,6 +15,7 @@ ktlint-plugin = "14.2.0"
 mavenPublish = "0.37.0"
 material3 = "1.9.0"
 robolectric = "4.17"
+roborazzi = "1.74.0"
 # renovate: datasource=npm depName=@mdi/svg
 mdi-svg = "7.4.47"
 
@@ -21,6 +24,11 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 junit = { module = "junit:junit", version.ref = "junit" }
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+compose-uiTestJunit4 = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
+androidx-compose-uiTestManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxTestEspresso" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.10.0" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 compose-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
@@ -39,3 +47,4 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

@@ -1,9 +1,15 @@
 # mdi-icons
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.timoptr/mdi-icons)](https://central.sonatype.com/artifact/io.github.timoptr/mdi-icons)
+[![Live demo](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://timoptr.github.io/mdi-icons/)
 
 A Compose Multiplatform library exposing the full [Material Design Icons](https://pictogrammers.com/library/mdi/)
 (MDI) catalog as Kotlin, targeting Android, iOS, desktop (JVM), JS and wasm.
+
+**[Browse the catalog in your browser](https://timoptr.github.io/mdi-icons/)**: the sample app from this
+repository, running on Compose for web.
+
+![The sample app listing the MDI catalog](docs/images/catalog.png)
 
 ## Installation
 
@@ -25,6 +31,77 @@ kotlin {
         }
     }
 }
+```
+
+## Usage
+
+### Show an icon you know at compile time
+
+Every icon has a generated accessor on `Mdi`, named after the icon in PascalCase. Accessors are
+extension properties in the `io.github.timoptr.mdiicons.generated` package, so the IDE imports
+each one you use:
+
+```kotlin
+import io.github.timoptr.mdiicons.Mdi
+import io.github.timoptr.mdiicons.generated.HomeAssistant
+import io.github.timoptr.mdiicons.rememberImageVector
+
+@Composable
+fun HomeIcon() {
+    Icon(
+        imageVector = Mdi.HomeAssistant.rememberImageVector(),
+        contentDescription = "Home Assistant",
+    )
+}
+```
+
+The result is a regular `ImageVector`, so it works with `Icon`, `Image` and tinting like the
+Material icons.
+
+### Resolve an icon name received at runtime
+
+Names coming from a server or user settings resolve with `fromMdiName`, which takes the name
+without the `mdi:` prefix. Aliases and historical renames are followed; unknown or removed names return `null`,
+so you choose the fallback:
+
+```kotlin
+val icon = Mdi.fromMdiName("lightbulb-on") ?: Mdi.HelpCircle
+
+Icon(imageVector = icon.rememberImageVector(), contentDescription = null)
+```
+
+![Searching the catalog for "home"](docs/images/search.png)
+
+### Mirror directional icons in right-to-left layouts
+
+```kotlin
+Icon(
+    imageVector = Mdi.ArrowLeft.rememberImageVector(autoMirror = true),
+    contentDescription = "Back",
+)
+```
+
+### List the whole catalog
+
+For an icon picker, `Mdi.icons` returns every icon:
+
+```kotlin
+LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 44.dp)) {
+    items(Mdi.icons, key = MdiIcon::name) { icon ->
+        Icon(imageVector = icon.rememberImageVector(), contentDescription = icon.name)
+    }
+}
+```
+
+### Draw into a `Bitmap` on Android
+
+For notifications, quick settings tiles, widgets or Android Auto, which cannot render Compose:
+
+```kotlin
+val bitmap = Mdi.HomeAssistant.toBitmap(context, sizeDp = 24, color = Color.WHITE)
+
+NotificationCompat.Builder(context, channelId)
+    .setLargeIcon(bitmap)
 ```
 
 ## Who this is for
@@ -54,17 +131,14 @@ This library replaces all of that with a small, owned pipeline over the canonica
 ## What it brings
 
 - The complete MDI catalog, generated from the pinned `@mdi/svg` version.
-- Runtime lookup by the names: `Mdi.fromMdiName("account-alert")`,
-  including the `meta.json` aliases and the historical renames.
+- Runtime lookup by name, including the `meta.json` aliases and the historical renames.
   Unknown or removed icons resolve to `null` so callers pick their own fallback.
-- Compile-time safe accessors for static usage: `Mdi.AccountAlert`, one `val` per icon.
+- Compile-time safe accessors for static usage, one `val` per icon.
 - Rendering as first-class Compose `ImageVector`s, identical to the frontend's path-based
-  rendering: `Icon(icon.rememberImageVector(), ...)` in any composable.
-- RTL support for directional icons: `rememberImageVector(autoMirror = true)` flips the icon
-  horizontally in right-to-left layouts, like the Material `AutoMirrored` icons. MDI carries no
+  rendering.
+- RTL support for directional icons, like the Material `AutoMirrored` icons. MDI carries no
   per-icon RTL metadata, so mirroring is opted into per call site.
-- Android-only `MdiIcon.toBitmap(...)` extensions (in `androidMain`) for surfaces that cannot
-  render Compose: notifications, quick settings tiles, widgets, Android Auto.
+- Android-only `toBitmap` extensions for surfaces that cannot render Compose.
 - An update pipeline: `./gradlew :shared:updateMdiIcons` regenerates the catalog from the version
   pinned in `gradle/libs.versions.toml`, verified against the npm registry checksum. Renovate
   watches the pin, and `verifyMdiIcons` fails CI until the catalog is regenerated after a bump.
@@ -123,3 +197,13 @@ One publication covers every target: Android, iOS (arm64 and simulator), desktop
 ```
 
 The version is pinned in `gradle/libs.versions.toml` under `mdi-svg` with a Renovate annotation.
+
+## Updating the README screenshots
+
+The images in `docs/images` are [Roborazzi](https://github.com/takahirom/roborazzi) screenshot tests of
+the sample app, rendered with Robolectric:
+
+```shell
+./gradlew :sample:recordRoborazziAndroidHostTest   # re-record after a sample UI change
+./gradlew :sample:verifyRoborazziAndroidHostTest   # check the images still match the app
+```
