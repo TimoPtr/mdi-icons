@@ -1,5 +1,8 @@
 package io.github.timoptr.mdiicons.sample
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -28,19 +31,27 @@ class ReadmeScreenshotTest {
     @Test
     @Config(qualifiers = "w900dp-h520dp-xhdpi")
     fun catalog() {
-        composeRule.setContent { App() }
-
-        composeRule.onRoot().captureRoboImage("catalog.png")
+        composeRule.apply {
+            setContent { App() }
+            waitForIdle()
+            onRoot().captureRoboImage("catalog.png")
+        }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Test
     @Config(qualifiers = "w900dp-h330dp-xhdpi")
     fun search() {
-        composeRule.setContent { App() }
-
-        composeRule.onNode(hasSetTextAction()).performTextInput("home")
-        composeRule.onNodeWithContentDescription("home-assistant").performClick()
-
-        composeRule.onRoot().captureRoboImage("search.png")
+        composeRule.apply {
+            // The Android ripple is a platform RippleDrawable animated outside the Compose test
+            // clock, so waitForIdle() cannot wait for it. Disable it to keep the capture stable.
+            setContent {
+                CompositionLocalProvider(LocalRippleConfiguration provides null) { App() }
+            }
+            onNode(hasSetTextAction()).performTextInput("home")
+            onNodeWithContentDescription("home-assistant").performClick()
+            waitForIdle()
+            onRoot().captureRoboImage("search.png")
+        }
     }
 }
