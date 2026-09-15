@@ -7,16 +7,17 @@ on: # yamllint disable-line rule:truthy
   push:
     branches: ["renovate/**"]
 
-permissions:
-  contents: write
-
 jobs:
   regenerate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # To push to the current branch
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true # Needed to be able to push the changes
 
-      - uses: ./.github/actions/setup-build-env
+      - uses: $/.github/actions/setup-build-env
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
