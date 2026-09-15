@@ -37,6 +37,7 @@ kotlin {
         }
         withHostTest {
             isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -62,6 +63,23 @@ kotlin {
             implementation(libs.robolectric)
         }
     }
+}
+
+tasks.withType<Test>().matching { it.name == "testAndroidHostTest" }.configureEach {
+    // https://robolectric.org/getting-started/#running-with-java-17-and-higher
+    // the JVM requires --add-opens flags so that Robolectric can access internal
+    // OpenJDK classes and APIs (java.lang, java.io, jdk.internal.access, etc.)
+    jvmArgs(
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.net=ALL-UNNAMED",
+        "--add-opens=java.base/java.security=ALL-UNNAMED",
+        "--add-opens=java.base/java.text=ALL-UNNAMED",
+        "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+        "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+        "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+    )
 }
 
 val mdiGeneratedDirectory = layout.projectDirectory.dir("src/commonMain/kotlin/io/github/timoptr/mdiicons/generated")
