@@ -12,7 +12,7 @@ kotlin = "2.4.20"
 ktlint-plugin = "14.2.0"
 mavenPublish = "0.37.0"
 material3 = "1.9.0"
-robolectric = "4.16.1"
+robolectric = "4.17"
 # renovate: datasource=npm depName=@mdi/svg
 mdi-svg = "7.4.47"
 
