@@ -45,6 +45,8 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
+        // Required for the Compose resources (the localized strings) on the Android library target.
+        androidResources.enable = true
         withHostTest {
             isIncludeAndroidResources = true
         }
@@ -58,6 +60,7 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.compose.componentsResources)
         }
         getByName("androidHostTest").dependencies {
             implementation(libs.junit)
@@ -69,6 +72,10 @@ kotlin {
             implementation(libs.androidx.test.espresso.core)
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "io.github.timoptr.mdiicons.sample.resources"
 }
 
 roborazzi {

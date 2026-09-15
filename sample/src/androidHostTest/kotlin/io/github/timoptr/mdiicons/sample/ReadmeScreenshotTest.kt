@@ -32,7 +32,7 @@ class ReadmeScreenshotTest {
     @Config(qualifiers = "w900dp-h520dp-xhdpi")
     fun catalog() {
         composeRule.apply {
-            setContent { App() }
+            setContent { IconCatalog() }
             waitForIdle()
             onRoot().captureRoboImage("catalog.png")
         }
@@ -46,7 +46,7 @@ class ReadmeScreenshotTest {
             // The Android ripple is a platform RippleDrawable animated outside the Compose test
             // clock, so waitForIdle() cannot wait for it. Disable it to keep the capture stable.
             setContent {
-                CompositionLocalProvider(LocalRippleConfiguration provides null) { App() }
+                CompositionLocalProvider(LocalRippleConfiguration provides null) { IconCatalog() }
             }
             onNode(hasSetTextAction()).performTextInput("home")
             onNodeWithContentDescription("home-assistant").performClick()
